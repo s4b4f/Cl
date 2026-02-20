@@ -57,4 +57,15 @@ const deleteServer = async (req, res) => {
   }
 };
 
-module.exports = { createServer, getServers, joinServer, deleteServer };
+const getServerInfo = async (req, res) => {
+  try {
+    const { serverId } = req.params;
+    const server = await prisma.server.findUnique({ where: { id: serverId } });
+    if (!server) return res.status(404).json({ success: false, error: '서버 없음!' });
+    res.json({ success: true, data: server });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+module.exports = { createServer, getServers, joinServer, deleteServer, getServerInfo };
