@@ -68,4 +68,48 @@ const getServerInfo = async (req, res) => {
   }
 };
 
-module.exports = { createServer, getServers, joinServer, deleteServer, getServerInfo };
+const generateInviteCode = () => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let code = '';
+  for (let i = 0; i < 8; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+};
+
+const createInvite = async (req, res) => {
+  try {
+    const { serverId } = req.body;
+    let code;
+    let exists = true;
+    while (exists) {
+      code = generateInviteCode();
+      const found = await prisma.invite.findUnique({ where: { code } });
+      exists = !!found;
+    }
+    const invite = await prisma.invite.create({
+      data: { code, serverId }
+    });
+    res.json({ success: true, data: invite });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+const joinByInvite = async (req, res) => {
+  try {
+    const { code, userId } = req.body;
+    const invite = await prisma.invite.findUnique({ where: { code } });
+    if (!invite) return res.status(404).json({ success: false, error: '초대 코드가 없어!' });
+
+    const existing = await prisma.member.findFirst({ where: { userId, serverId: invite.serverId } });
+    if (existing) return res.status(400).json({ success: false, error: '이미 참가한 서버야!' });
+
+    await prisma.member.create({ data: { userId, serverId: invite.serverId } });
+    res.json({ success: true, data: { serverId: invite.serverId } });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+module.exports = { createServer, getServers, joinServer, deleteServer, getServerInfo, createInvite, joinByInvite };

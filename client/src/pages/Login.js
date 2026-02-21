@@ -17,7 +17,7 @@ function Login() {
       localStorage.setItem('username', res.data.data.username);
       localStorage.setItem('userId', res.data.data.userId);
       localStorage.setItem('tag', res.data.data.tag);
-      navigate('/chat');
+      navigate('/');
     } catch (err) {
       setError('이메일이나 비밀번호가 틀렸어!');
     }

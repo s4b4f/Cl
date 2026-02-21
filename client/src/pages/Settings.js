@@ -47,10 +47,10 @@ function Settings() {
         <div style={{ fontSize: '20px', fontWeight: '800', marginBottom: '24px' }}>
           NEX<span style={{ color: '#00b4a6' }}>ORA</span>
         </div>
-        <div onClick={() => navigate('/chat')} style={{
+        <div onClick={() => navigate('/')} style={{
           padding: '10px 14px', borderRadius: '8px', cursor: 'pointer',
           color: '#72767d', fontWeight: '600', marginBottom: '8px',
-        }}>💬 채팅</div>
+        }}>홈으로</div>
         <div onClick={() => navigate('/friends')} style={{
           padding: '10px 14px', borderRadius: '8px', cursor: 'pointer',
           color: '#72767d', fontWeight: '600', marginBottom: '8px',

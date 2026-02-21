@@ -6,6 +6,7 @@ import Chat from './pages/Chat';
 import Friends from './pages/Friends';
 import Settings from './pages/Settings';
 import Home from './pages/Home';
+import Server from './pages/Server';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/friends" element={<Friends />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/server/:serverId" element={<Server />} />
       </Routes>
     </BrowserRouter>
   );

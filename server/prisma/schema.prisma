@@ -28,6 +28,7 @@ model Server {
   createdAt DateTime  @default(now())
   channels  Channel[]
   members   Member[]
+  invites   Invite[]
 }
 
 model Member {
@@ -65,4 +66,12 @@ model FriendRequest {
   createdAt  DateTime @default(now())
   sender     User     @relation("sent", fields: [senderId], references: [id])
   receiver   User     @relation("received", fields: [receiverId], references: [id])
+}
+
+model Invite {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  serverId  String
+  createdAt DateTime @default(now())
+  server    Server   @relation(fields: [serverId], references: [id])
 }

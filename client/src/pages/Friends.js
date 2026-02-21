@@ -61,11 +61,11 @@ function Friends() {
         <div style={{ fontSize: '20px', fontWeight: '800', marginBottom: '24px' }}>
           NEX<span style={{ color: '#00b4a6' }}>ORA</span>
         </div>
-        <div onClick={() => navigate('/chat')} style={{
+        <div onClick={() => navigate('/')} style={{
           padding: '10px 14px', borderRadius: '8px', cursor: 'pointer',
           color: '#72767d', fontWeight: '600', marginBottom: '8px',
         }}>
-          💬 채팅
+          홈으로
         </div>
         <div style={{
           padding: '10px 14px', borderRadius: '8px', cursor: 'pointer',
@@ -73,6 +73,12 @@ function Friends() {
           color: '#00b4a6', fontWeight: '600',
         }}>
           👥 친구
+        </div>
+        <div onClick={() => navigate('/settings')} style={{
+          padding: '10px 14px', borderRadius: '8px', cursor: 'pointer',
+          color: '#72767d', fontWeight: '600', marginBottom: '8px',
+        }}>
+            ⚙️ 설정
         </div>
         <div style={{
           marginTop: 'auto', borderTop: '1px solid #2e2f35',

@@ -14,6 +14,8 @@ function Server() {
   const [input, setInput] = useState('');
   const [showCreateChannel, setShowCreateChannel] = useState(false);
   const [channelName, setChannelName] = useState('');
+  const [inviteCode, setInviteCode] = useState(null);
+  const [showInvite, setShowInvite] = useState(false);
   const navigate = useNavigate();
   const messagesEndRef = useRef(null);
 
@@ -61,6 +63,12 @@ function Server() {
     fetchChannels();
   };
 
+  const createInvite = async () => {
+    const res = await axios.post('http://localhost:3000/api/servers/invite', { serverId });
+    setInviteCode(res.data.data.code);
+    setShowInvite(true);
+  };
+
   const sendMessage = (e) => {
     e.preventDefault();
     if (!input.trim() || !currentChannel) return;
@@ -92,8 +100,13 @@ function Server() {
         width: '240px', background: '#1a1b1e', display: 'flex',
         flexDirection: 'column', borderRight: '1px solid #2e2f35',
       }}>
-        <div style={{ padding: '16px', borderBottom: '1px solid #2e2f35', fontWeight: '800', fontSize: '16px' }}>
-          {server?.name || '...'}
+        <div style={{
+          padding: '16px', borderBottom: '1px solid #2e2f35',
+          fontWeight: '800', fontSize: '16px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <span>{server?.name || '...'}</span>
+          <span onClick={createInvite} style={{ fontSize: '12px', color: '#00b4a6', cursor: 'pointer', fontWeight: '600' }}>초대</span>
         </div>
         <div style={{ flex: 1, padding: '8px', overflowY: 'auto' }}>
           <div style={{
@@ -197,6 +210,32 @@ function Server() {
                 borderRadius: '8px', color: 'white', cursor: 'pointer', fontWeight: '700',
               }}>만들기</button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* 초대 코드 모달 */}
+      {showInvite && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100,
+        }}>
+          <div style={{ background: '#1a1b1e', borderRadius: '16px', padding: '32px', width: '400px' }}>
+            <h2 style={{ marginBottom: '8px' }}>초대 코드</h2>
+            <p style={{ color: '#72767d', fontSize: '13px', marginBottom: '20px' }}>이 코드를 친구한테 공유해봐!</p>
+            <div style={{
+              background: '#111214', padding: '14px 16px', borderRadius: '8px',
+              color: '#00b4a6', fontWeight: '700', fontSize: '18px', letterSpacing: '2px',
+              textAlign: 'center', marginBottom: '12px',
+            }}>{inviteCode}</div>
+            <button onClick={() => navigator.clipboard.writeText(inviteCode)} style={{
+              width: '100%', padding: '12px', background: '#00b4a6', border: 'none',
+              borderRadius: '8px', color: 'white', fontWeight: '700', cursor: 'pointer', marginBottom: '8px',
+            }}>코드 복사</button>
+            <button onClick={() => setShowInvite(false)} style={{
+              width: '100%', padding: '12px', background: 'none', border: '1px solid #2e2f35',
+              borderRadius: '8px', color: '#72767d', fontWeight: '700', cursor: 'pointer',
+            }}>닫기</button>
           </div>
         </div>
       )}
